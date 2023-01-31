@@ -3,7 +3,9 @@ package br.com.udemycourse.demo.Services;
 import br.com.udemycourse.demo.Exceptions.ResourceNotFoundException;
 import br.com.udemycourse.demo.Models.Person;
 import br.com.udemycourse.demo.data.vo.v1.PersonVO;
+import br.com.udemycourse.demo.data.vo.v2.PersonVOV2;
 import br.com.udemycourse.demo.mapper.ModelMapper;
+import br.com.udemycourse.demo.mapper.custom.PersonMapper;
 import br.com.udemycourse.demo.repositories.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class PersonServices {
 
     @Autowired
     private PersonRepo repository;
+
+    @Autowired
+    private PersonMapper personMapper;
 
     public List<PersonVO> findAll() {
 
@@ -54,4 +59,9 @@ public class PersonServices {
     }
 
 
+    public PersonVOV2 createV2(PersonVOV2 personVOV2) {
+        logger.info("Creating one person with V2");
+        Person personTransformed = personMapper.ConvertVoToEntity(personVOV2);
+        return personMapper.convertEntityToVo(repository.save(personTransformed));
+    }
 }
