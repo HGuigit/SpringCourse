@@ -2,13 +2,13 @@ package br.com.udemycourse.demo.Services;
 
 import br.com.udemycourse.demo.Exceptions.ResourceNotFoundException;
 import br.com.udemycourse.demo.Models.Person;
+import br.com.udemycourse.demo.data.vo.v1.PersonVO;
+import br.com.udemycourse.demo.mapper.ModelMapper;
 import br.com.udemycourse.demo.repositories.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 @Service
@@ -19,26 +19,25 @@ public class PersonServices {
     @Autowired
     private PersonRepo repository;
 
-    public List<Person> findAll() {
+    public List<PersonVO> findAll() {
 
-        return repository.findAll();
+        return ModelMapper.parseListObjects(repository.findAll(), PersonVO.class);
     }
 
-    public Person findById(Long id) {
+    public PersonVO findById(Long id) {
         logger.info("finding one person");
 
-        Person person = new Person();
-
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records Found for this Id"));
+        return ModelMapper.parseObject(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records Found for this Id")), PersonVO.class);
     }
 
-    public Person create(Person person){
-        logger.info("Creating One Person");
-        return repository.save(person);
+    public PersonVO create(PersonVO person){
+        logger.info("Creating One PersonVO");
+        Person personTransformed = ModelMapper.parseObject(person, Person.class);
+        return ModelMapper.parseObject(repository.save(personTransformed), PersonVO.class);
     }
 
-    public Person update(Person person){
-        logger.info("Creating One Person");
+    public PersonVO update(PersonVO person){
+        logger.info("Creating One PersonVO");
 
         Person entity = repository.findById(person.getId()).orElseThrow(() -> new ResourceNotFoundException("No records Found for this Id"));
         entity.setFirstName(person.getFirstName());
@@ -46,7 +45,7 @@ public class PersonServices {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
         
-        return repository.save(entity);
+        return ModelMapper.parseObject(repository.save(entity), PersonVO.class);
     }
 
     public void delete(Long id){
