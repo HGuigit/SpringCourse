@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.MediaType.*;
+
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -16,33 +18,32 @@ public class PersonController {
     @Autowired
     private PersonServices personServices;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" })
     public PersonVO findById(@PathVariable(value = "id") Long id) {
         return personServices.findById(id);
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE , "application/x-yaml" })
     public List<PersonVO> findById() {
         return personServices.findAll();
     }
 
     @PostMapping(value = "/create",
-            produces = MediaType.APPLICATION_JSON_VALUE, consumes =
-            MediaType.APPLICATION_JSON_VALUE
+            produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" }, consumes = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" }
     )
     public PersonVO create(@RequestBody PersonVO person) {
         return personServices.create(person);
     }
 
-    @PostMapping(value = "/v2/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes =
-            MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/v2/create", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" }, consumes = {
+            APPLICATION_JSON_VALUE, "application/x-yaml", APPLICATION_XML_VALUE })
     public PersonVOV2 createV2(@RequestBody PersonVOV2 personVOV2){
         return personServices.createV2(personVOV2);
     }
 
     @PutMapping(value = "/update",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" },
+            consumes = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" }
     )
     public PersonVO update(@RequestBody PersonVO person) {
         return personServices.update(person);
