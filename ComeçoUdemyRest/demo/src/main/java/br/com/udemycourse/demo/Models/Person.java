@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Person implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "first_name", nullable = false, length = 80)
     private String firstName;
@@ -17,7 +17,7 @@ public class Person implements Serializable {
     private String lastName;
     @Column(nullable = false, length = 100)
     private String address;
-    @Column(nullable = false, length = 6)
+    @Column(nullable = false, length = 20)
     private String gender;
 
     public Person() {

@@ -41,11 +41,12 @@ public class PersonController {
         return personServices.createV2(personVOV2);
     }
 
+
     @PutMapping(value = "/update",
             produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" },
             consumes = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml" }
     )
-    public PersonVO update(@RequestBody PersonVO person) {
+    public PersonVO update(@RequestBody(required = false) PersonVO person) {
         return personServices.update(person);
     }
 

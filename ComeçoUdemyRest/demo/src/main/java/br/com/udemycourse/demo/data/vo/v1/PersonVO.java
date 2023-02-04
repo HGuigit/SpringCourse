@@ -3,14 +3,33 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
+import org.dozer.Mapping;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 
 @JsonPropertyOrder({"id","address", "firstName", "lastName",  "gender"})
-public class PersonVO implements Serializable {
+public class    PersonVO extends RepresentationModel<PersonVO> implements Serializable {
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        PersonVO personVO = (PersonVO) o;
+        return Objects.equals(key, personVO.key) && Objects.equals(firstName, personVO.firstName) && Objects.equals(lastName, personVO.lastName) && Objects.equals(address, personVO.address) && Objects.equals(gender, personVO.gender);
+    }
 
-    private Long id;
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), key, firstName, lastName, address, gender);
+    }
+
+    @Mapping("id")
+    @JsonProperty("id")
+    private Long key;
     @JsonProperty("first_name")
     private String firstName;
 
@@ -19,18 +38,17 @@ public class PersonVO implements Serializable {
 
     private String address;
 
-    @JsonIgnore
     private String gender;
 
     public PersonVO() {
     }
 
-    public Long getId() {
-        return this.id;
+    public Long getKey() {
+        return key;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKey(Long key) {
+        this.key = key;
     }
 
     public String getFirstName() {
