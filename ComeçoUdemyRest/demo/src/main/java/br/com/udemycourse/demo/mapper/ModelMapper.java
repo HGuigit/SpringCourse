@@ -6,6 +6,7 @@ import org.dozer.DozerBeanMapper;
 import org.modelmapper.TypeMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ModelMapper {
@@ -13,7 +14,6 @@ public class ModelMapper {
     public static DozerBeanMapper mapper = new DozerBeanMapper();
 
     public  static  <O, D> D parseObject(O origin, Class<D> destination){
-
         return  mapper.map(origin, destination);
     }
 

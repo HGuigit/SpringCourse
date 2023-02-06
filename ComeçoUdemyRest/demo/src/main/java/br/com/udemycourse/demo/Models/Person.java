@@ -2,7 +2,6 @@ package br.com.udemycourse.demo.Models;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "person")

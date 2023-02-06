@@ -10,7 +10,7 @@ import br.com.udemycourse.demo.mapper.ModelMapper;
 import br.com.udemycourse.demo.mapper.custom.PersonMapper;
 import br.com.udemycourse.demo.repositories.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 
 @JsonPropertyOrder({"id","address", "firstName", "lastName",  "gender"})
-public class    PersonVO extends RepresentationModel<PersonVO> implements Serializable {
+public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
 
     @Override
     public boolean equals(Object o) {
