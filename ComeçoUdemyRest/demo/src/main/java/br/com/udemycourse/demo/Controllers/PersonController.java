@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.*;
 
+//@CrossOrigin
 @RestController
 @RequestMapping("/person")
 @Tag(name = "People", description = "Endpoints for threating People")
@@ -26,6 +27,7 @@ public class PersonController {
     @Autowired
     private PersonServices personServices;
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/{id}", produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml"})
     @Operation(summary = "Finds a person",
             description = "Finds a person",
@@ -64,6 +66,7 @@ public class PersonController {
         return personServices.findAll();
     }
 
+    @CrossOrigin(origins = {"http://localhost:8080", "https://erudio.com.br"})
     @PostMapping(value = "/create",
             produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml"}, consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "application/x-yaml"}
     )
