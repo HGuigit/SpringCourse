@@ -60,4 +60,7 @@ public class WebConfig  implements WebMvcConfigurer {
                 .allowedOrigins(allowedOrigins)
                 .allowCredentials(true);
     }
+
+
+
 }

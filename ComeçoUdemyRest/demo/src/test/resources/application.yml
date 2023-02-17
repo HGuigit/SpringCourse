@@ -1,6 +1,12 @@
 cors:
   originPatterns: "http://localhost:8080,https://erudio.com.br,http://localhost:3000"
 server.port: 8888
+security:
+  jwt:
+    token:
+      secret-key: 53cr27
+      expired-length: 3600000
+      refresh-expired-length: 18000000
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,7 +18,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
   springdoc:
-    pathsToMatch: /person/**
+    pathsToMatch: /**
     swagger-ui:
       use-root-path: true
 

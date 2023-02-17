@@ -2,6 +2,7 @@ package br.com.udemycourse.demo.Exceptions.handler;
 
 
 import br.com.udemycourse.demo.Exceptions.ExceptionResponse;
+import br.com.udemycourse.demo.Exceptions.InvalidJwtAuthenticationException;
 import br.com.udemycourse.demo.Exceptions.RequiredObjectIsNullException;
 import br.com.udemycourse.demo.Exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public final ResponseEntity<ExceptionResponse> handleRequiredObjectIsNullException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthException(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 
 }
