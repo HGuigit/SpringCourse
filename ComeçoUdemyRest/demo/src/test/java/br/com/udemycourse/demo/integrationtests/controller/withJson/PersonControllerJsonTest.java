@@ -1,4 +1,4 @@
-package br.com.udemycourse.demo.integrationtests.controller;
+package br.com.udemycourse.demo.integrationtests.controller.withJson;
 
 import static io.restassured.RestAssured.given;
 
@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -19,6 +20,9 @@ import io.restassured.response.ResponseBodyExtractionOptions;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
+
+import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -128,7 +132,6 @@ public class PersonControllerJsonTest  extends AbstractIntegrationTest {
         Assertions.assertEquals(content, "Invalid CORS request");
 
     }
-
     @Test
     @Order(3)
     public void testFindById() throws JsonProcessingException {
@@ -137,7 +140,7 @@ public class PersonControllerJsonTest  extends AbstractIntegrationTest {
         var content = given().spec(specification)
                 .basePath("/person/")
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SEMERU)
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO )
                 .pathParams("id", person.getId())
                 .when()
                 .get("{id}")
@@ -161,11 +164,111 @@ public class PersonControllerJsonTest  extends AbstractIntegrationTest {
 
     }
 
+    @Test
+    @Order(4)
+    public void testUpdate() throws JsonProcessingException {
+
+        Long oldPersonId = person.getId();
+        mockUpdatePerson();
+
+        var content = given().spec(specification)
+                .basePath("/person/update")
+                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO)
+                .body(person)
+                .when()
+                .put()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        PersonVO updatedPerson = objectMapper.readValue(content, PersonVO.class);
+        Assertions.assertNotNull(updatedPerson);
+        Assertions.assertNotNull(updatedPerson.getId());
+        Assertions.assertNotNull(updatedPerson.getAddress());
+        Assertions.assertNotNull(updatedPerson.getFirstName());
+        Assertions.assertNotNull(updatedPerson.getLastName());
+        Assertions.assertNotNull(updatedPerson.getGender());
+
+        Assertions.assertTrue(updatedPerson.getId() > 0);
+        Assertions.assertEquals(oldPersonId, updatedPerson.getId());
+
+        Assertions.assertEquals("Nelson", updatedPerson.getFirstName());
+        Assertions.assertEquals("Mandela", updatedPerson.getLastName());
+        Assertions.assertEquals("Africa", updatedPerson.getAddress());
+        Assertions.assertEquals("Male", updatedPerson.getGender());
+
+    }
+
+    @Test
+    @Order(5)
+    public void deletePersonTest() throws JsonProcessingException {
+
+        given().spec(specification)
+                .basePath("/person/delete")
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO )
+                .pathParams("id", person.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
+
+    }
+
+    @Test
+    @Order(6)
+    public void testFindAll() throws JsonProcessingException {
+
+        var content = given().spec(specification)
+                .basePath("/person/all")
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO)
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        List<PersonVO> people = objectMapper.readValue(content, new com.fasterxml.jackson.core.type.TypeReference<List<PersonVO>>() {});
+
+        PersonVO personOne = people.get(0);
+
+
+        Assertions.assertEquals(1, personOne.getId());
+
+        Assertions.assertEquals("Leonardooooo", personOne.getFirstName());
+        Assertions.assertEquals("Da Vinci", personOne.getLastName());
+        Assertions.assertEquals("São Paulo", personOne.getAddress());
+        Assertions.assertEquals("M", personOne.getGender());
+
+        PersonVO personTwo = people.get(1);
+
+        Assertions.assertEquals(2, personTwo.getId());
+
+        Assertions.assertEquals("Guilherme", personTwo.getFirstName());
+        Assertions.assertEquals("Souza", personTwo.getLastName());
+        Assertions.assertEquals("Rio de Janeiro", personTwo.getAddress());
+        Assertions.assertEquals("M", personTwo.getGender());
+
+
+
+    }
+
 
     private void mockPerson() {
         person.setFirstName("Richard");
         person.setLastName("Stallman");
         person.setAddress("New york city");
+        person.setGender("Male");
+    }
+
+    private void mockUpdatePerson() {
+        person.setFirstName("Nelson");
+        person.setLastName("Mandela");
+        person.setAddress("Africa");
         person.setGender("Male");
     }
 

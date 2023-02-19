@@ -3,6 +3,7 @@ package br.com.udemycourse.demo.data.vo.v1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.dozer.Mapping;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.RepresentationModel;
@@ -11,9 +12,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+@XmlRootElement
 @JsonPropertyOrder({"id","author", "launch_date", "price",  "title"})
 public class BookVO extends RepresentationModel<BookVO> implements Serializable {
+
 
     @Mapping("id")
     @JsonProperty("id")
@@ -29,6 +31,9 @@ public class BookVO extends RepresentationModel<BookVO> implements Serializable 
 
     private String title;
 
+    public BookVO(){
+
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -3,13 +3,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.dozer.Mapping;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-
+@XmlRootElement
 @JsonPropertyOrder({"id","address", "firstName", "lastName",  "gender"})
 public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
 

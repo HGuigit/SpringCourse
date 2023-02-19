@@ -1,10 +1,13 @@
 package br.com.udemycourse.demo.data.vo.v1.security;
 
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+@XmlRootElement
 public class TokenVO implements Serializable {
 
     private String username;
