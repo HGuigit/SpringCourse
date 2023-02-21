@@ -12,6 +12,7 @@ import br.com.udemycourse.demo.repositories.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -74,6 +75,14 @@ public class PersonServices {
         Person entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records Found for this Id"));
         repository.delete(entity);
     }
+
+    @Transactional
+    public void disablePerson(Long id) {
+        logger.info("disabling person with id: " + id);
+
+        repository.disablePerson(id);
+    }
+
 
 
     public PersonVOV2 createV2(PersonVOV2 personVOV2) {

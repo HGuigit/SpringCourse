@@ -115,6 +115,26 @@ public class PersonController {
         return personServices.update(person);
     }
 
+    @PatchMapping(value = "/disable-person/{id}")
+    @Operation(summary = "Disables a person",
+            description = "Disables a person",
+            tags = {"People"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200", content = @Content),
+                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+                    @ApiResponse(description = "BadRequest", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unathorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+            })
+    public ResponseEntity disablePerson(@PathVariable(value = "id") Long id) {
+        try{
+            personServices.disablePerson(id);
+            return ResponseEntity.ok("Pessoa desabilitada com sucesso.");
+        } catch (Exception e){
+            return ResponseEntity.status(400).body("Falha ao modificar a pessoa");
+        }
+    }
     @DeleteMapping(value = "/delete/{id}")
     @Operation(summary = "deletes a person",
             description = "deletes a person",
